@@ -48,7 +48,7 @@ DLL 是一个包含可由多个程序同时使用的代码和数据的库。例�
 > 官方链接：https://docs.microsoft.com/en-us/windows/win32/dlls/dynamic-link-library-search-order
 > 本次讨论的动态链接库加载顺序不包含Windows应用商店应用，只限于常用的桌面应用程序
 
-**DLL查找路径的基础：**
+**1. DLL查找路径的基础：**
 应用程序可以通过以下方式控制一个DLL的加载路径：使用全路径加载、使用DLL重定向、使用manifest文件。如果上述三种方式均未指定，系统查找DLL的顺序将按照本部分描述的顺序进行。
 
 对于以下两种情况的DLL，系统将不会查找，而是直接加载：
@@ -59,13 +59,14 @@ b. 如果该DLL存在于某个Windows版本的已知DLL列表（unkown DLL）中
 
 这里有个比较坑的地方，对于有依赖项的DLL（即使使用全路径指定DLL位置），系统查找其所依赖DLL的方法是按照实际的模块名称来的，因此如果加载的DLL不在系统查找顺序目录下，那么动态加载该DLL（LoadLibrary）会返回一个"找不到模块"的错误。
 
-
 看了一圈资料发现从Windows不同版来了解DLL的加载顺序比较顺畅
+
 **2. 系统标准DLL查找顺序**
+
 > https://www.cnblogs.com/tocy/p/windows_dll_searth_path.html
 > http://sh1yan.top/2019/06/16/The-Principle-and-Practice-of-DLL-Hijacking/
 
-##  Windows XP SP2之前
+## Windows XP SP2之前
 
 Windows查找DLL的目录以及对应的顺序（Windows XP下，"安全DLL查找模式"默认是禁用的，需要启用该项的话，在注册表中新建一个SafeDllSearchMode子项，并赋值为1即可。"安全DLL查找模式"从Windows XP SP2开始，默认是启用的）：
 
@@ -76,7 +77,7 @@ Windows查找DLL的目录以及对应的顺序（Windows XP下，"安全DLL查�
 5. Windows目录（通过 GetWindowsDirectory 获取）（通常是系统盘\Windows）；
 6. PATH环境变量中的各个目录；
 
-##  Windows xp sp2（包含）以上
+## Windows xp sp2（包含）以上
 Windows查找DLL的目录以及对应的顺序（SafeDllSearchMode 默认会被开启）：
 默认注册表为：HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\SafeDllSearchMode，其键值为1
 
@@ -91,7 +92,7 @@ Windows查找DLL的目录以及对应的顺序（SafeDllSearchMode 默认会被�
 系统没有了SafeDllSearchMode 而采用KnownDLLs，那么凡是此项下的DLL文件就会被禁止从EXE自身所在的目录下调用，而只能从系统目录即SYSTEM32目录下调用，其注册表位置：
 计算机\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\KnownDLLs
 
-![微信截图_20191210171651](C:\Users\liwei\Dropbox\Github\Boomboomdunce.github.io\image\微信截图_20191210171651.png)
+![微信截图_20191210171651](../image/微信截图_20191210171651.png)
 那么最终Windows2003以上以及win7以上操作系统通过“DLL路径搜索目录顺序”和“KnownDLLs注册表项”的机制来确定应用程序所要调用的DLL的路径，之后，应用程序就将DLL载入了自己的内存空间，执行相应的函数功能。
 1. 进程对应的应用程序所在目录；（也就是运行的EXE所在的目录）
 2. 系统目录（通过 GetSystemDirectory 获取）（％SystemRoot％\ system32）；
@@ -103,5 +104,6 @@ Windows查找DLL的目录以及对应的顺序（SafeDllSearchMode 默认会被�
 # 动态链接库的加载方式
 
 # 动态链接库黑客技术
+## DLL劫持与白加黑
 
 # 动态链接库的安全解决方法
